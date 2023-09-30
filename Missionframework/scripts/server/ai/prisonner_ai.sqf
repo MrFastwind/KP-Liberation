@@ -2,7 +2,13 @@ params ["_unit", ["_force_surrender", false]];
 
 if ((!_force_surrender) && ((random 100) > GRLIB_surrender_chance)) exitWith {};
 
-if ((_unit isKindOf "Man") && (alive _unit) && (side group _unit == GRLIB_side_enemy)) then {
+_unit_unconscious = true;
+
+if (KP_liberation_ace) then {
+    _unit_unconscious = _unit getVariable ["ACE_isUnconscious", true];
+};
+
+if ((_unit isKindOf "Man") && (alive _unit) && (side group _unit == GRLIB_side_enemy) && (!_unit_unconscious)) then {
 
     if (vehicle _unit != _unit) then {deleteVehicle _unit};
 
@@ -26,6 +32,7 @@ if ((_unit isKindOf "Man") && (alive _unit) && (side group _unit == GRLIB_side_e
         [_unit] joinSilent _grp;
         if (KP_liberation_ace) then {
             ["ace_captives_setSurrendered", [_unit, true], _unit] call CBA_fnc_targetEvent;
+            _unit call ace_medical_treatment_fnc_fullHealLocal; //Prevent death of captives
         } else {
             _unit disableAI "ANIM";
             _unit disableAI "MOVE";
