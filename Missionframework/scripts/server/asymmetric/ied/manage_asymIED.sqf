@@ -40,6 +40,9 @@ if (!(isnull _roadobj)) then {
         };
         sleep 1;
     };
+    if (_sector in KP_liberation_asymmetric_sectors && !_goes_boom) then {
+        [KP_liberation_cr_ied_defuse_gain] call F_cr_changeCR;
+    };
 } else {
     if (KP_liberation_asymmetric_debug > 0) then {[format ["manage_asymIED.sqf -> _roadobj is Null for IED %1 at %2", _count, markerText _sector], "ASYMMETRIC"] remoteExecCall ["KPLIB_fnc_log", 2];};
 };
